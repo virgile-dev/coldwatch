@@ -165,25 +165,45 @@
         .step p  { font-size: .875rem; color: rgba(255,255,255,.6); line-height: 1.65; }
 
         /* ── TARIFS ── */
-        .pricing-grid {
+        .pricing-items {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
-            gap: 22px; max-width: 660px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px; max-width: 660px; margin-bottom: 32px;
         }
-        .price-card {
+        .pricing-item {
             background: var(--white); border: 1px solid var(--border);
-            border-radius: 12px; padding: 32px 28px;
+            border-radius: 10px; padding: 26px 22px;
+            display: flex; gap: 16px; align-items: flex-start;
         }
-        .price-card.featured { border: 2px solid var(--accent); }
-        .price-type { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-lt); margin-bottom: 10px; }
-        .price-type.blue { color: var(--accent); }
-        .price-amount { font-size: 2.5rem; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-bottom: 5px; }
-        .price-amount small { font-size: 1rem; font-weight: 500; color: var(--text-mid); }
-        .price-sub  { font-size: .8rem; color: var(--text-lt); margin-bottom: 18px; }
-        .divider    { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
-        .price-desc { font-size: .875rem; color: var(--text-mid); line-height: 1.65; }
-        .badge { display: inline-block; background: rgba(30,111,196,.1); color: var(--accent); font-size: .7rem; font-weight: 600; padding: 3px 10px; border-radius: 100px; margin-top: 12px; }
-        .pricing-note { margin-top: 22px; font-size: .82rem; color: var(--text-lt); }
+        .pricing-item .icon-wrap { flex-shrink: 0; margin-bottom: 0; }
+        .pricing-item h3 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
+        .pricing-item p  { font-size: .875rem; color: var(--text-mid); line-height: 1.6; }
+        .pilot-callout {
+            background: rgba(30,111,196,.07);
+            border: 1px solid rgba(30,111,196,.25);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px; padding: 22px 24px;
+            max-width: 560px;
+        }
+        .pilot-callout p { font-size: .9rem; color: var(--text-mid); line-height: 1.65; }
+        .pilot-callout strong { color: var(--text); }
+
+        /* ── TÉMOIGNAGE ── */
+        .testimonial-wrap {
+            max-width: 720px;
+        }
+        blockquote.testimonial {
+            border-left: 3px solid var(--accent);
+            padding-left: 28px;
+        }
+        .testimonial-text {
+            font-size: 1.15rem; line-height: 1.75;
+            color: var(--text); font-style: italic;
+            margin-bottom: 20px;
+        }
+        .testimonial-author { font-style: normal; display: block; }
+        .testimonial-author strong { display: block; font-size: .95rem; font-weight: 600; color: var(--text); }
+        .testimonial-author span  { font-size: .82rem; color: var(--text-lt); }
 
         /* ── CTA FINAL ── */
         .cta-final { text-align: center; }
@@ -325,22 +345,22 @@
     <div class="container">
         <span class="label label-lt">Mise en service</span>
         <h2>Opérationnel en moins d'une heure</h2>
-        <p class="lead">Pas d'intervention technique, pas de câblage, pas de formation longue. ColdWatch est conçu pour que vous soyez autonome dès le premier jour.</p>
+        <p class="lead">Nous nous occupons de l'installation. Vous n'avez qu'à vous connecter et définir vos seuils.</p>
         <div class="steps">
             <div class="step">
                 <div class="step-num">1</div>
-                <h3>Fixez le capteur</h3>
-                <p>Placez le capteur sans fil dans ou sur votre équipement frigorifique. Aucun câblage requis. La fixation prend moins de cinq minutes.</p>
+                <h3>Installation sur place</h3>
+                <p>Nous installons le boîtier ColdWatch chez vous et le connectons à votre réseau Wi-Fi. Les capteurs sans fil sont fixés sur vos équipements frigorifiques. Comptez moins d'une heure.</p>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
-                <h3>Configurez le tableau de bord</h3>
-                <p>Créez votre compte, associez vos capteurs et définissez vos seuils de température. Tout se fait depuis un navigateur, en quelques clics.</p>
+                <h3>Configurez vos seuils</h3>
+                <p>Accédez au tableau de bord, définissez les seuils de température par appareil et renseignez les numéros à alerter. Tout se fait depuis un navigateur, en quelques clics.</p>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
                 <h3>Recevez vos alertes</h3>
-                <p>Dès qu'une anomalie est détectée, vous êtes alerté par SMS. Vous pouvez mettre une alerte en veille depuis le tableau de bord si besoin.</p>
+                <p>Dès qu'une anomalie est détectée, vous êtes alerté par SMS. Vous pouvez mettre une alerte en veille par appareil depuis le tableau de bord si besoin.</p>
             </div>
         </div>
     </div>
@@ -350,26 +370,47 @@
 <section class="section section-bg" id="tarifs">
     <div class="container">
         <span class="label">Tarifs</span>
-        <h2>Simple, transparent, sans surprise</h2>
-        <p class="lead">Un kit matériel pour démarrer, un abonnement mensuel pour la surveillance. Aucun engagement de durée.</p>
-        <div class="pricing-grid">
-            <div class="price-card">
-                <div class="price-type">Kit matériel</div>
-                <div class="price-amount">~90 <small>€</small></div>
-                <div class="price-sub">Achat unique &middot; par capteur</div>
-                <hr class="divider">
-                <p class="price-desc">Capteur sans fil, concentrateur et tout le nécessaire pour une installation autonome. Pas de frais cachés à l'activation.</p>
+        <h2>Une tarification simple, en deux postes</h2>
+        <p class="lead">Pas de surprise sur la facture. ColdWatch repose sur deux composantes claires, sans frais cachés.</p>
+        <div class="pricing-items">
+            <div class="pricing-item">
+                <div class="icon-wrap icon-blue">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>
+                </div>
+                <div>
+                    <h3>Mise en place</h3>
+                    <p>Matériel (capteurs sans fil, boîtier) et installation sur place inclus. Frais unique, réglé une seule fois.</p>
+                </div>
             </div>
-            <div class="price-card featured">
-                <div class="price-type blue">Abonnement</div>
-                <div class="price-amount">25 <small>€/mois</small></div>
-                <div class="price-sub">Par établissement &middot; sans engagement</div>
-                <hr class="divider">
-                <p class="price-desc">Surveillance temps réel, alertes SMS illimitées, accès tableau de bord, historique des relevés et support inclus.</p>
-                <div class="badge">Sans engagement</div>
+            <div class="pricing-item">
+                <div class="icon-wrap icon-blue">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                    <h3>Abonnement mensuel</h3>
+                    <p>Surveillance temps réel, alertes SMS illimitées, accès tableau de bord et support. Sans engagement de durée.</p>
+                </div>
             </div>
         </div>
-        <p class="pricing-note">Vous exploitez plusieurs établissements ? Contactez-nous pour un tarif adapté.</p>
+        <div class="pilot-callout">
+            <p><strong>Nous sommes en phase pilote</strong> et recherchons de nouveaux restaurants partenaires à Paris et en Ile-de-France. Si vous souhaitez rejoindre les premiers établissements à déployer ColdWatch, contactez-nous — nous étudions chaque demande individuellement.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TÉMOIGNAGE -->
+<section class="section" id="temoignage">
+    <div class="container">
+        <span class="label">Ils nous font confiance</span>
+        <div class="testimonial-wrap">
+            <blockquote class="testimonial">
+                <p class="testimonial-text">Avant ColdWatch, je vérifiais les frigos moi-même chaque matin en espérant qu'il ne s'était rien passé la nuit. La première semaine après l'installation, j'ai reçu une alerte à 2h du matin : mon congélateur remontait anormalement en température. J'ai appelé un technicien dans la nuit, on a évité une perte de stock complète. Maintenant je dors tranquille, et mes relevés HACCP se font tout seuls.</p>
+                <cite class="testimonial-author">
+                    <strong>Mariana</strong>
+                    <span>Chori sur Seine &mdash; restaurant argentin, Paris</span>
+                </cite>
+            </blockquote>
+        </div>
     </div>
 </section>
 
