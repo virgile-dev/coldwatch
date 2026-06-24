@@ -189,21 +189,33 @@
         .pilot-callout strong { color: var(--text); }
 
         /* ── TÉMOIGNAGE ── */
-        .testimonial-wrap {
-            max-width: 720px;
-        }
+        .testimonial-wrap { max-width: 720px; }
         blockquote.testimonial {
             border-left: 3px solid var(--accent);
             padding-left: 28px;
         }
         .testimonial-text {
-            font-size: 1.15rem; line-height: 1.75;
+            font-size: 1.1rem; line-height: 1.8;
             color: var(--text); font-style: italic;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
-        .testimonial-author { font-style: normal; display: block; }
-        .testimonial-author strong { display: block; font-size: .95rem; font-weight: 600; color: var(--text); }
-        .testimonial-author span  { font-size: .82rem; color: var(--text-lt); }
+        .testimonial-footer { display: flex; align-items: center; gap: 14px; }
+        .testimonial-photo {
+            width: 56px; height: 56px; border-radius: 50%;
+            object-fit: cover; flex-shrink: 0;
+            border: 2px solid var(--border);
+        }
+        .testimonial-author { font-style: normal; }
+        .testimonial-author strong { display: block; font-size: .95rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+        .restaurant-link {
+            display: block; font-size: .82rem; color: var(--text-mid);
+            text-decoration: none; margin-bottom: 4px;
+        }
+        .restaurant-link:hover { color: var(--accent); }
+        .stars { display: flex; align-items: center; gap: 5px; }
+        .stars-filled { color: #f59e0b; font-size: .9rem; letter-spacing: 1px; }
+        .stars-score  { font-size: .82rem; font-weight: 600; color: var(--text); }
+        .stars-label  { font-size: .78rem; color: var(--text-lt); }
 
         /* ── CTA FINAL ── */
         .cta-final { text-align: center; }
@@ -404,11 +416,19 @@
         <span class="label">Ils nous font confiance</span>
         <div class="testimonial-wrap">
             <blockquote class="testimonial">
-                <p class="testimonial-text">Avant ColdWatch, je vérifiais les frigos moi-même chaque matin en espérant qu'il ne s'était rien passé la nuit. La première semaine après l'installation, j'ai reçu une alerte à 2h du matin : mon congélateur remontait anormalement en température. J'ai appelé un technicien dans la nuit, on a évité une perte de stock complète. Maintenant je dors tranquille, et mes relevés HACCP se font tout seuls.</p>
-                <cite class="testimonial-author">
-                    <strong>Mariana</strong>
-                    <span>Chori sur Seine &mdash; restaurant argentin, Paris</span>
-                </cite>
+                <p class="testimonial-text">En un mois, on a eu deux coupures de courant la nuit. À chaque fois, je découvrais le lendemain matin que les équipements avaient chauffé — et je devais jeter des centaines d'euros de marchandise. En plus, noter les températures deux fois par jour pour le HACCP, c'est une vraie contrainte quand le service est chargé. Quand j'ai entendu parler de la canicule annoncée pour la semaine suivante, j'ai décidé d'agir. Pour moins de 200 euros d'investissement total, j'avais enfin un système qui surveille à ma place. Maintenant, si quelque chose se passe la nuit, je le sais dans la minute — et mes relevés se font automatiquement.</p>
+                <div class="testimonial-footer">
+                    <img src="assets/maruchori.png" alt="Mariana, Chori sur Seine" class="testimonial-photo">
+                    <cite class="testimonial-author">
+                        <strong>Mariana</strong>
+                        <a href="https://maps.app.goo.gl/NStLSunMVJ2nzD2C6" target="_blank" rel="noopener noreferrer" class="restaurant-link">Chori sur Seine &mdash; restaurant argentin, Paris</a>
+                        <div class="stars">
+                            <span class="stars-filled">★★★★★</span>
+                            <span class="stars-score">4,9 / 5</span>
+                            <span class="stars-label">sur Google</span>
+                        </div>
+                    </cite>
+                </div>
             </blockquote>
         </div>
     </div>
