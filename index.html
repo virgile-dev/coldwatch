@@ -44,16 +44,41 @@
         html:not(.lang-en) .en { display: none; }
         html.lang-en .fr { display: none; }
 
-        .lang-toggle {
+        .lang-dropdown { position: relative; }
+        .lang-dropdown-trigger {
+            display: flex; align-items: center; gap: 6px;
             background: rgba(255,255,255,.08);
             border: 1px solid rgba(255,255,255,.2);
-            color: rgba(255,255,255,.65);
-            padding: 6px 13px; border-radius: 6px;
-            font-size: .78rem; font-weight: 700; letter-spacing: .06em;
+            color: rgba(255,255,255,.75);
+            padding: 6px 10px 6px 13px; border-radius: 6px;
+            font-size: .78rem; font-weight: 700; letter-spacing: .04em;
             cursor: pointer; font-family: inherit;
             transition: background .15s, color .15s;
         }
-        .lang-toggle:hover { background: rgba(255,255,255,.15); color: #fff; }
+        .lang-dropdown-trigger:hover { background: rgba(255,255,255,.15); color: #fff; }
+        .lang-dropdown-trigger svg { width: 12px; height: 12px; transition: transform .15s; flex-shrink: 0; }
+        .lang-dropdown.open .lang-dropdown-trigger svg { transform: rotate(180deg); }
+        .lang-menu {
+            position: absolute; top: calc(100% + 6px); right: 0;
+            background: #1a2d45;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 8px; padding: 4px;
+            min-width: 130px;
+            opacity: 0; pointer-events: none; transform: translateY(-4px);
+            transition: opacity .15s, transform .15s;
+            z-index: 200;
+        }
+        .lang-dropdown.open .lang-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .lang-menu button {
+            display: flex; align-items: center; gap: 8px; width: 100%;
+            background: none; border: none; border-radius: 6px;
+            padding: 8px 12px;
+            font-size: .82rem; font-weight: 600; color: rgba(255,255,255,.6);
+            cursor: pointer; font-family: inherit;
+            transition: background .12s, color .12s;
+        }
+        .lang-menu button:hover { background: rgba(255,255,255,.08); color: #fff; }
+        .lang-menu button.active { color: #fff; background: rgba(30,111,196,.35); }
 
         /* ── NAV ── */
         header {
@@ -324,9 +349,16 @@
         <nav class="nav-inner" aria-label="Navigation principale">
             <a href="#" class="logo">Cold<em>Watch</em></a>
             <div class="nav-links">
-                <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
-                    <span class="fr">🇬🇧 EN</span><span class="en">🇫🇷 FR</span>
-                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-dropdown-trigger" onclick="toggleLangDropdown()" aria-haspopup="true">
+                        <span id="lang-current">🇫🇷 FR</span>
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="lang-menu" role="menu">
+                        <button data-lang="fr" onclick="setLang('fr')" class="active">🇫🇷 Français</button>
+                        <button data-lang="en" onclick="setLang('en')">🇬🇧 English</button>
+                    </div>
+                </div>
                 <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                     GitHub
@@ -648,18 +680,31 @@
 </footer>
 
 <script>
-    function toggleLang() {
+    function toggleLangDropdown() {
+        document.getElementById('langDropdown').classList.toggle('open');
+    }
+    function setLang(lang) {
+        const goEn = lang === 'en';
         const html = document.documentElement;
-        const goEn = !html.classList.contains('lang-en');
         html.classList.toggle('lang-en', goEn);
-        html.lang = goEn ? 'en' : 'fr';
+        html.lang = lang;
         document.title = goEn
             ? 'ColdWatch — Open-source IoT temperature monitoring for restaurants'
             : 'ColdWatch — Surveillance IoT de température pour restaurants';
-        try { localStorage.setItem('coldwatch-lang', goEn ? 'en' : 'fr'); } catch(e) {}
+        document.getElementById('lang-current').textContent = goEn ? '🇬🇧 EN' : '🇫🇷 FR';
+        document.querySelectorAll('.lang-menu button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        document.getElementById('langDropdown').classList.remove('open');
+        try { localStorage.setItem('coldwatch-lang', lang); } catch(e) {}
     }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('#langDropdown')) {
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+    });
     (function() {
-        try { if (localStorage.getItem('coldwatch-lang') === 'en') toggleLang(); } catch(e) {}
+        try { if (localStorage.getItem('coldwatch-lang') === 'en') setLang('en'); } catch(e) {}
     })();
 </script>
 
