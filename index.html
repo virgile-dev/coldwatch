@@ -40,6 +40,21 @@
 
         .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
+        /* ── LANGUAGE TOGGLE ── */
+        html:not(.lang-en) .en { display: none; }
+        html.lang-en .fr { display: none; }
+
+        .lang-toggle {
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.2);
+            color: rgba(255,255,255,.65);
+            padding: 6px 13px; border-radius: 6px;
+            font-size: .78rem; font-weight: 700; letter-spacing: .06em;
+            cursor: pointer; font-family: inherit;
+            transition: background .15s, color .15s;
+        }
+        .lang-toggle:hover { background: rgba(255,255,255,.15); color: #fff; }
+
         /* ── NAV ── */
         header {
             position: sticky; top: 0; z-index: 100;
@@ -63,7 +78,7 @@
             border: 1px solid rgba(255,255,255,.15); font-size: .875rem;
         }
         .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.35); }
-        .btn-ghost svg, .btn-github svg { width: 17px; height: 17px; flex-shrink: 0; }
+        .btn-ghost svg { width: 17px; height: 17px; flex-shrink: 0; }
 
         .btn-github {
             display: inline-flex; align-items: center; gap: 9px;
@@ -75,7 +90,7 @@
             transition: background .15s, border-color .15s;
         }
         .btn-github:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.35); }
-        .btn-github svg { width: 20px; height: 20px; }
+        .btn-github svg { width: 20px; height: 20px; flex-shrink: 0; }
 
         /* ── HERO ── */
         .hero {
@@ -140,7 +155,7 @@
         }
         .section-dark .lead { color: rgba(255,255,255,.62); }
 
-        /* ── CONTEXTE ── */
+        /* ── PAIN CARDS ── */
         .pain-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -165,7 +180,7 @@
         .pain-card h3 { font-size: .95rem; font-weight: 600; margin-bottom: 7px; }
         .pain-card p  { font-size: .875rem; color: var(--text-mid); line-height: 1.65; }
 
-        /* ── FONCTIONNALITÉS ── */
+        /* ── FEATURES ── */
         .feat-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
@@ -180,7 +195,7 @@
         .feat-card h3 { font-size: .95rem; font-weight: 600; margin-bottom: 7px; }
         .feat-card p  { font-size: .875rem; color: var(--text-mid); line-height: 1.65; }
 
-        /* ── COMMENT ÇA MARCHE ── */
+        /* ── STEPS ── */
         .steps {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -197,7 +212,7 @@
         .step h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 9px; }
         .step p  { font-size: .875rem; color: rgba(255,255,255,.58); line-height: 1.65; }
 
-        /* ── TÉMOIGNAGE ── */
+        /* ── TESTIMONIAL ── */
         .testimonial-wrap { max-width: 720px; }
         blockquote.testimonial {
             border-left: 3px solid var(--accent);
@@ -224,6 +239,18 @@
         .stars-label  { font-size: .78rem; color: var(--text-lt); }
 
         /* ── OPEN SOURCE ── */
+        .stack-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+        .stack-chip {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 8px; padding: 14px 18px;
+            flex: 1; min-width: 190px;
+        }
+        .stack-chip .icon-wrap { flex-shrink: 0; margin-bottom: 0; }
+        .stack-chip h4 { font-size: .875rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
+        .stack-chip p  { font-size: .8rem; color: rgba(255,255,255,.45); line-height: 1.5; }
+
         .terminal {
             background: rgba(0,0,0,.32);
             border: 1px solid rgba(255,255,255,.09);
@@ -254,22 +281,6 @@
         }
         .os-card h3 { font-size: .95rem; font-weight: 600; color: #fff; margin-bottom: 7px; }
         .os-card p  { font-size: .875rem; color: rgba(255,255,255,.52); line-height: 1.65; }
-
-        /* ── STACK ROW ── */
-        .stack-row {
-            display: flex; flex-wrap: wrap; gap: 12px;
-            margin-bottom: 32px;
-        }
-        .stack-chip {
-            display: flex; align-items: flex-start; gap: 12px;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.1);
-            border-radius: 8px; padding: 14px 18px;
-            flex: 1; min-width: 190px;
-        }
-        .stack-chip .icon-wrap { flex-shrink: 0; margin-bottom: 0; }
-        .stack-chip h4 { font-size: .875rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
-        .stack-chip p  { font-size: .8rem; color: rgba(255,255,255,.45); line-height: 1.5; }
 
         /* ── CTA FINAL ── */
         .cta-final { text-align: center; }
@@ -307,6 +318,9 @@
         <nav class="nav-inner" aria-label="Navigation principale">
             <a href="#" class="logo">Cold<em>Watch</em></a>
             <div class="nav-links">
+                <button class="lang-toggle" onclick="toggleLang()" aria-label="Switch language">
+                    <span class="fr">EN</span><span class="en">FR</span>
+                </button>
                 <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                     GitHub
@@ -323,55 +337,76 @@
         <div class="hero-badges">
             <div class="pill pill-green">Open Source</div>
             <div class="pill">Raspberry Pi · IoT</div>
-            <div class="pill">Restauration</div>
+            <div class="pill fr">Restauration</div>
+            <div class="pill en">Food Service</div>
         </div>
-        <h1>Surveiller la température de ses frigos<br><em>ne devrait pas être compliqué.</em></h1>
-        <p class="hero-desc">ColdWatch est un projet hobbyiste construit avec un Raspberry Pi et des capteurs sans fil. Il surveille les températures en temps réel et envoie un SMS quand quelque chose ne va pas — la nuit, le week-end, pendant la canicule. Le code est ouvert.</p>
+        <h1>
+            <span class="fr">Surveiller la température de ses frigos<br><em>ne devrait pas être compliqué.</em></span>
+            <span class="en">Monitoring your fridges' temperature<br><em>shouldn't be complicated.</em></span>
+        </h1>
+        <p class="hero-desc fr">ColdWatch est un projet hobbyiste construit avec un Raspberry Pi et des capteurs sans fil. Il surveille les températures en temps réel et envoie un SMS quand quelque chose ne va pas — la nuit, le week-end, pendant la canicule. Le code est ouvert.</p>
+        <p class="hero-desc en">ColdWatch is a hobbyist project built with a Raspberry Pi and wireless sensors. It monitors temperatures in real time and sends an SMS when something goes wrong — at night, on weekends, during a heatwave. The code is open.</p>
         <div class="hero-ctas">
             <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn-github">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                Voir sur GitHub
+                <span class="fr">Voir sur GitHub</span>
+                <span class="en">View on GitHub</span>
             </a>
-            <a href="#contexte" class="btn btn-primary btn-primary-lg">Découvrir le projet</a>
+            <a href="#contexte" class="btn btn-primary btn-primary-lg">
+                <span class="fr">Découvrir le projet</span>
+                <span class="en">Learn more</span>
+            </a>
         </div>
-        <p class="hero-note">Déjà déployé et testé dans un vrai restaurant parisien</p>
+        <p class="hero-note fr">Déjà déployé et testé dans un vrai restaurant parisien</p>
+        <p class="hero-note en">Already deployed and tested in a real Parisian restaurant</p>
     </div>
 </section>
 
 <!-- CONTEXTE -->
 <section class="section section-bg" id="contexte">
     <div class="container">
-        <span class="label">Pourquoi j'ai construit ça</span>
-        <h2>Un problème réel, une solution faite maison</h2>
-        <p class="lead">Les restaurants sont légalement tenus de surveiller leurs températures frigorifiques pour le HACCP. En pratique, ça veut dire des relevés manuels deux fois par jour — et aucune alerte quand un frigo tombe en panne la nuit.</p>
+        <span class="label fr">Pourquoi j'ai construit ça</span>
+        <span class="label en">Why I built this</span>
+        <h2 class="fr">Un problème réel, une solution faite maison</h2>
+        <h2 class="en">A real problem, a homemade solution</h2>
+        <p class="lead fr">Les restaurants sont légalement tenus de surveiller leurs températures frigorifiques pour le HACCP. En pratique, ça veut dire des relevés manuels deux fois par jour — et aucune alerte quand un frigo tombe en panne la nuit.</p>
+        <p class="lead en">Restaurants are legally required to monitor fridge temperatures for HACCP compliance. In practice, that means manual logs twice a day — and no alert when a fridge fails in the middle of the night.</p>
         <div class="pain-grid">
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <h3>Relevés manuels chronophages</h3>
-                <p>Pointer les températures deux fois par jour, tous les jours, est une contrainte légale que peu d'équipes tiennent rigoureusement dans la durée.</p>
+                <h3 class="fr">Relevés manuels chronophages</h3>
+                <h3 class="en">Time-consuming manual logs</h3>
+                <p class="fr">Pointer les températures deux fois par jour, tous les jours, est une contrainte légale que peu d'équipes tiennent rigoureusement dans la durée.</p>
+                <p class="en">Logging temperatures twice a day, every day, is a legal requirement that few teams manage to keep up with rigorously over time.</p>
             </div>
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                 </div>
-                <h3>Pannes nocturnes non détectées</h3>
-                <p>La majorité des défaillances surviennent hors des heures d'ouverture. Sans surveillance, vous ne le savez qu'au matin — quand il est trop tard.</p>
+                <h3 class="fr">Pannes nocturnes non détectées</h3>
+                <h3 class="en">Undetected overnight failures</h3>
+                <p class="fr">La majorité des défaillances surviennent hors des heures d'ouverture. Sans surveillance, vous ne le savez qu'au matin — quand il est trop tard.</p>
+                <p class="en">Most failures happen outside opening hours. Without monitoring, you only find out in the morning — when it's too late.</p>
             </div>
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <h3>Pertes alimentaires coûteuses</h3>
-                <p>Une rupture de chaîne du froid, c'est des centaines — parfois des milliers — d'euros de marchandise à jeter, sans compter le risque sanitaire.</p>
+                <h3 class="fr">Pertes alimentaires coûteuses</h3>
+                <h3 class="en">Costly food losses</h3>
+                <p class="fr">Une rupture de chaîne du froid, c'est des centaines — parfois des milliers — d'euros de marchandise à jeter, sans compter le risque sanitaire.</p>
+                <p class="en">A broken cold chain means hundreds — sometimes thousands — of euros of stock to throw away, plus the food safety risk to your customers.</p>
             </div>
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
-                <h3>Conformité HACCP stressante</h3>
-                <p>Sans registre complet et à jour, une visite de contrôle sanitaire peut tourner à votre désavantage. La conformité n'est pas une option : c'est une obligation légale.</p>
+                <h3 class="fr">Conformité HACCP stressante</h3>
+                <h3 class="en">Stressful HACCP compliance</h3>
+                <p class="fr">Sans registre complet et à jour, une visite de contrôle sanitaire peut tourner à votre désavantage. La conformité n'est pas une option : c'est une obligation légale.</p>
+                <p class="en">Without a complete, up-to-date log, a health inspection can go badly for you. Compliance isn't optional — it's a legal requirement.</p>
             </div>
         </div>
     </div>
@@ -380,44 +415,57 @@
 <!-- FONCTIONNALITÉS -->
 <section class="section" id="fonctionnalites">
     <div class="container">
-        <span class="label">Ce que ça fait</span>
-        <h2>Simple, fiable, sans abonnement SaaS</h2>
-        <p class="lead">ColdWatch tourne sur un Raspberry Pi chez le restaurateur et surveille les équipements à sa place, en permanence.</p>
+        <span class="label fr">Ce que ça fait</span>
+        <span class="label en">What it does</span>
+        <h2 class="fr">Simple, fiable, sans abonnement SaaS</h2>
+        <h2 class="en">Simple, reliable, no SaaS subscription</h2>
+        <p class="lead fr">ColdWatch tourne sur un Raspberry Pi chez le restaurateur et surveille les équipements à sa place, en permanence.</p>
+        <p class="lead en">ColdWatch runs on a Raspberry Pi at the restaurant and monitors equipment around the clock.</p>
         <div class="feat-grid">
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
-                <h3>Alertes SMS instantanées</h3>
-                <p>Un seuil dépassé, une anomalie détectée — un SMS part immédiatement, où que vous soyez, jour et nuit.</p>
+                <h3 class="fr">Alertes SMS instantanées</h3>
+                <h3 class="en">Instant SMS alerts</h3>
+                <p class="fr">Un seuil dépassé, une anomalie détectée — un SMS part immédiatement, où que vous soyez, jour et nuit.</p>
+                <p class="en">A threshold exceeded, an anomaly detected — an SMS goes out immediately, wherever you are, day or night.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 </div>
-                <h3>Surveillance 24h/24, 7j/7</h3>
-                <p>Les capteurs envoient les relevés en temps réel, de jour comme de nuit, week-ends et jours fériés compris.</p>
+                <h3 class="fr">Surveillance 24h/24, 7j/7</h3>
+                <h3 class="en">24/7 monitoring</h3>
+                <p class="fr">Les capteurs envoient les relevés en temps réel, de jour comme de nuit, week-ends et jours fériés compris.</p>
+                <p class="en">Sensors report in real time, day and night, weekends and public holidays included.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 </div>
-                <h3>Détection de panne</h3>
-                <p>Si un capteur cesse d'émettre, ColdWatch le détecte et alerte : panne de capteur, batterie morte ou défaillance de l'équipement.</p>
+                <h3 class="fr">Détection de panne</h3>
+                <h3 class="en">Fault detection</h3>
+                <p class="fr">Si un capteur cesse d'émettre, ColdWatch le détecte et alerte : panne de capteur, batterie morte ou défaillance de l'équipement.</p>
+                <p class="en">If a sensor stops reporting, ColdWatch detects it and alerts: sensor failure, dead battery, or equipment malfunction.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
-                <h3>Suivi de batterie</h3>
-                <p>L'état de la batterie de chaque capteur est visible sur le tableau de bord. Vous êtes prévenu avant la coupure.</p>
+                <h3 class="fr">Suivi de batterie</h3>
+                <h3 class="en">Battery tracking</h3>
+                <p class="fr">L'état de la batterie de chaque capteur est visible sur le tableau de bord. Vous êtes prévenu avant la coupure.</p>
+                <p class="en">Each sensor's battery level is visible in the dashboard at all times. You're notified before it dies.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
-                <h3>Tableau de bord web</h3>
-                <p>Relevés temps réel, historique des températures, alertes passées, mise en veille par appareil — depuis n'importe quel navigateur.</p>
+                <h3 class="fr">Tableau de bord web</h3>
+                <h3 class="en">Web dashboard</h3>
+                <p class="fr">Relevés temps réel, historique des températures, alertes passées, mise en veille par appareil — depuis n'importe quel navigateur.</p>
+                <p class="en">Live readings, temperature history, past alerts, per-device snooze — from any browser.</p>
             </div>
         </div>
     </div>
@@ -426,24 +474,33 @@
 <!-- COMMENT ÇA MARCHE -->
 <section class="section section-dark" id="fonctionnement">
     <div class="container">
-        <span class="label label-lt">Mise en service</span>
-        <h2>Opérationnel en moins d'une heure</h2>
-        <p class="lead">Pas de câblage, pas de technicien externe. Un Raspberry Pi, des capteurs sans fil, et c'est parti.</p>
+        <span class="label label-lt fr">Mise en service</span>
+        <span class="label label-lt en">Getting started</span>
+        <h2 class="fr">Opérationnel en moins d'une heure</h2>
+        <h2 class="en">Up and running in under an hour</h2>
+        <p class="lead fr">Pas de câblage, pas de technicien externe. Un Raspberry Pi, des capteurs sans fil, et c'est parti.</p>
+        <p class="lead en">No wiring, no external technician. A Raspberry Pi, wireless sensors, and you're good to go.</p>
         <div class="steps">
             <div class="step">
                 <div class="step-num">1</div>
-                <h3>Installation sur place</h3>
-                <p>On installe le Raspberry Pi chez le restaurateur et on le connecte à son réseau Wi-Fi. Les capteurs sans fil sont fixés sur les équipements frigorifiques. Moins d'une heure.</p>
+                <h3 class="fr">Installation sur place</h3>
+                <h3 class="en">On-site installation</h3>
+                <p class="fr">On installe le Raspberry Pi chez le restaurateur et on le connecte à son réseau Wi-Fi. Les capteurs sans fil sont fixés sur les équipements frigorifiques. Moins d'une heure.</p>
+                <p class="en">We install the Raspberry Pi at the restaurant and connect it to the local Wi-Fi. Wireless sensors are fixed to the cold storage units. Under an hour.</p>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
-                <h3>Configuration</h3>
-                <p>Le restaurateur accède au tableau de bord, définit ses seuils de température par appareil et renseigne les numéros à alerter. Quelques clics.</p>
+                <h3 class="fr">Configuration</h3>
+                <h3 class="en">Configuration</h3>
+                <p class="fr">Le restaurateur accède au tableau de bord, définit ses seuils de température par appareil et renseigne les numéros à alerter. Quelques clics.</p>
+                <p class="en">The owner logs into the dashboard, sets temperature thresholds per device, and adds the numbers to alert. A few clicks.</p>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
-                <h3>ColdWatch veille</h3>
-                <p>Dès qu'une anomalie est détectée, un SMS part immédiatement. Les alertes peuvent être mises en veille par appareil depuis le tableau de bord.</p>
+                <h3 class="fr">ColdWatch veille</h3>
+                <h3 class="en">ColdWatch watches</h3>
+                <p class="fr">Dès qu'une anomalie est détectée, un SMS part immédiatement. Les alertes peuvent être mises en veille par appareil depuis le tableau de bord.</p>
+                <p class="en">The moment an anomaly is detected, an SMS goes out immediately. Alerts can be snoozed per device from the dashboard.</p>
             </div>
         </div>
     </div>
@@ -452,19 +509,22 @@
 <!-- TÉMOIGNAGE -->
 <section class="section" id="temoignage">
     <div class="container">
-        <span class="label">Testé en conditions réelles</span>
+        <span class="label fr">Testé en conditions réelles</span>
+        <span class="label en">Tested in the real world</span>
         <div class="testimonial-wrap">
             <blockquote class="testimonial">
-                <p class="testimonial-text">En un mois, on a eu deux coupures de courant la nuit. À chaque fois, je découvrais le lendemain matin que les équipements avaient chauffé — et je devais jeter des centaines d'euros de marchandise. En plus, noter les températures deux fois par jour pour le HACCP, c'est une vraie contrainte quand le service est chargé. Quand j'ai entendu parler de la canicule annoncée pour la semaine suivante, j'ai décidé d'agir. Comparé à la marchandise perdue et au stress de savoir que ça pouvait recommencer, ça n'a pas été une question longtemps. Maintenant, si quelque chose se passe la nuit, je le sais dans la minute — et mes relevés se font automatiquement.</p>
+                <p class="testimonial-text fr">En un mois, on a eu deux coupures de courant la nuit. À chaque fois, je découvrais le lendemain matin que les équipements avaient chauffé — et je devais jeter des centaines d'euros de marchandise. En plus, noter les températures deux fois par jour pour le HACCP, c'est une vraie contrainte quand le service est chargé. Quand j'ai entendu parler de la canicule annoncée pour la semaine suivante, j'ai décidé d'agir. Comparé à la marchandise perdue et au stress de savoir que ça pouvait recommencer, ça n'a pas été une question longtemps. Maintenant, si quelque chose se passe la nuit, je le sais dans la minute — et mes relevés se font automatiquement.</p>
+                <p class="testimonial-text en">In one month we had two overnight power outages. Each time, I'd find out the next morning that the equipment had warmed up — and I'd have to throw away hundreds of euros of stock. On top of that, logging temperatures twice a day for HACCP is a real burden when service is busy. When I heard about the heatwave forecast for the following week, I decided to act. Compared to the stock we'd lost and the stress of knowing it could happen again, it didn't take long to decide. Now, if something happens overnight, I know within the minute — and my logs happen automatically.</p>
                 <div class="testimonial-footer">
                     <img src="assets/maruchori.png" alt="Mariana, Chori sur Seine" class="testimonial-photo">
                     <cite class="testimonial-author">
                         <strong>Mariana</strong>
-                        <a href="https://maps.app.goo.gl/NStLSunMVJ2nzD2C6" target="_blank" rel="noopener noreferrer" class="restaurant-link">Chori sur Seine &mdash; restaurant argentin, Paris</a>
+                        <a href="https://maps.app.goo.gl/NStLSunMVJ2nzD2C6" target="_blank" rel="noopener noreferrer" class="restaurant-link">Chori sur Seine &mdash; <span class="fr">restaurant argentin, Paris</span><span class="en">Argentinian restaurant, Paris</span></a>
                         <div class="stars">
                             <span class="stars-filled">★★★★★</span>
-                            <span class="stars-score">4,9 / 5</span>
-                            <span class="stars-label">sur Google</span>
+                            <span class="stars-score">4.9 / 5</span>
+                            <span class="stars-label fr">sur Google</span>
+                            <span class="stars-label en">on Google</span>
                         </div>
                     </cite>
                 </div>
@@ -476,9 +536,12 @@
 <!-- OPEN SOURCE -->
 <section class="section section-dark" id="open-source">
     <div class="container">
-        <span class="label label-green">Code ouvert</span>
-        <h2>Un projet fait pour être partagé</h2>
-        <p class="lead">ColdWatch est un projet personnel construit pendant mon temps libre. Le code est disponible sur GitHub sous licence MIT. Si vous avez un restaurant, êtes développeur, ou les deux — bienvenue.</p>
+        <span class="label label-green fr">Code ouvert</span>
+        <span class="label label-green en">Open code</span>
+        <h2 class="fr">Un projet fait pour être partagé</h2>
+        <h2 class="en">A project built to be shared</h2>
+        <p class="lead fr">ColdWatch est un projet personnel construit pendant mon temps libre. Le code est disponible sur GitHub sous licence MIT. Si vous avez un restaurant, êtes développeur, ou les deux — bienvenue.</p>
+        <p class="lead en">ColdWatch is a personal project built in my spare time. The code is available on GitHub under the MIT license. Whether you run a restaurant, code for fun, or both — welcome.</p>
         <div class="stack-row">
             <div class="stack-chip">
                 <div class="icon-wrap icon-green">
@@ -486,7 +549,8 @@
                 </div>
                 <div>
                     <h4>Raspberry Pi Zero</h4>
-                    <p>Le tout tourne sur un Pi à ~15 €, sans bruit, sans serveur cloud.</p>
+                    <p class="fr">Le tout tourne sur un Pi à ~15 €, sans bruit, sans serveur cloud.</p>
+                    <p class="en">The whole thing runs on a ~€15 Pi, silent, no cloud server.</p>
                 </div>
             </div>
             <div class="stack-chip">
@@ -495,7 +559,8 @@
                 </div>
                 <div>
                     <h4>Free Mobile SMS</h4>
-                    <p>Si vous avez Free Mobile, les alertes SMS sont gratuites. Pas d'abonnement tiers.</p>
+                    <p class="fr">Si vous avez Free Mobile, les alertes SMS sont gratuites. Pas d'abonnement tiers.</p>
+                    <p class="en">If you have Free Mobile, SMS alerts are free. No third-party subscription.</p>
                 </div>
             </div>
             <div class="stack-chip">
@@ -503,17 +568,21 @@
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
                 </div>
                 <div>
-                    <h4>100 % local</h4>
-                    <p>SQLite sur le Pi. Aucune donnée n'est envoyée à un serveur externe.</p>
+                    <h4 class="fr">100 % local</h4>
+                    <h4 class="en">100% local</h4>
+                    <p class="fr">SQLite sur le Pi. Aucune donnée n'est envoyée à un serveur externe.</p>
+                    <p class="en">SQLite on the Pi. No data is sent to an external server.</p>
                 </div>
             </div>
         </div>
         <div class="terminal">
-            <span class="t-comment"># Cloner le projet</span><br>
+            <span class="t-comment fr"># Cloner le projet</span>
+            <span class="t-comment en"># Clone the project</span><br>
             <span class="t-cmd">git clone https://github.com/virgile-dev/coldwatch.git</span><br>
             <span class="t-out">Cloning into 'coldwatch'...</span><br>
             <br>
-            <span class="t-comment"># Installer et lancer</span><br>
+            <span class="t-comment fr"># Installer et lancer</span>
+            <span class="t-comment en"># Install and run</span><br>
             <span class="t-cmd">cd coldwatch &amp;&amp; ./setup.sh</span>
         </div>
         <div class="os-grid">
@@ -521,27 +590,34 @@
                 <div class="icon-wrap icon-green">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                 </div>
-                <h3>Contributions bienvenues</h3>
-                <p>Bug, idée de fonctionnalité, amélioration de la doc — ouvrez une issue ou soumettez une PR. Le projet est encore jeune et a plein de marge.</p>
+                <h3 class="fr">Contributions bienvenues</h3>
+                <h3 class="en">Contributions welcome</h3>
+                <p class="fr">Bug, idée de fonctionnalité, amélioration de la doc — ouvrez une issue ou soumettez une PR. Le projet est encore jeune et a plein de marge.</p>
+                <p class="en">Bug, feature idea, doc improvement — open an issue or submit a PR. The project is young and has plenty of room to grow.</p>
             </div>
             <div class="os-card">
                 <div class="icon-wrap icon-green">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                 </div>
-                <h3>Vous êtes restaurateur ?</h3>
-                <p>Si vous voulez tester ColdWatch dans votre établissement, écrivez-moi. Je cherche des retours d'usage concrets pour améliorer le projet.</p>
+                <h3 class="fr">Vous êtes restaurateur ?</h3>
+                <h3 class="en">Are you a restaurant owner?</h3>
+                <p class="fr">Si vous voulez tester ColdWatch dans votre établissement, écrivez-moi. Je cherche des retours d'usage concrets pour améliorer le projet.</p>
+                <p class="en">If you want to test ColdWatch in your establishment, reach out. I'm looking for real-world usage feedback to improve the project.</p>
             </div>
             <div class="os-card">
                 <div class="icon-wrap icon-green">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
-                <h3>Licence MIT</h3>
-                <p>Utilisez, modifiez, redistribuez librement. Si vous construisez quelque chose à partir de ColdWatch, je serais curieux de l'entendre.</p>
+                <h3 class="fr">Licence MIT</h3>
+                <h3 class="en">MIT License</h3>
+                <p class="fr">Utilisez, modifiez, redistribuez librement. Si vous construisez quelque chose à partir de ColdWatch, je serais curieux de l'entendre.</p>
+                <p class="en">Use it, modify it, redistribute freely. If you build something with ColdWatch, I'd love to hear about it.</p>
             </div>
         </div>
         <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn-github">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-            virgile-dev/coldwatch sur GitHub
+            <span class="fr">virgile-dev/coldwatch sur GitHub</span>
+            <span class="en">virgile-dev/coldwatch on GitHub</span>
         </a>
     </div>
 </section>
@@ -549,16 +625,35 @@
 <!-- CTA FINAL -->
 <section class="section cta-final">
     <div class="container">
-        <span class="label">Envie d'en parler ?</span>
-        <h2>Une question, un retour, une idée ?</h2>
-        <p class="lead">Que vous soyez restaurateur curieux, développeur ou simplement intéressé par le projet — je lis tous les messages.</p>
-        <a href="mailto:contact@coldwatch.fr" class="btn btn-primary btn-primary-lg">Écrire à contact@coldwatch.fr</a>
+        <span class="label fr">Envie d'en parler ?</span>
+        <span class="label en">Want to talk?</span>
+        <h2 class="fr">Une question, un retour, une idée ?</h2>
+        <h2 class="en">A question, some feedback, an idea?</h2>
+        <p class="lead fr">Que vous soyez restaurateur curieux, développeur ou simplement intéressé par le projet — je lis tous les messages.</p>
+        <p class="lead en">Whether you're a curious restaurant owner, a developer, or just interested in the project — I read every message.</p>
+        <a href="mailto:contact@coldwatch.fr" class="btn btn-primary btn-primary-lg">contact@coldwatch.fr</a>
     </div>
 </section>
 
 <footer>
-    <p>&copy; 2026 ColdWatch &mdash; Projet open source &middot; <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer">GitHub</a> &middot; <a href="mailto:contact@coldwatch.fr">contact@coldwatch.fr</a></p>
+    <p>&copy; 2026 ColdWatch &mdash; <span class="fr">Projet open source</span><span class="en">Open source project</span> &middot; <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer">GitHub</a> &middot; <a href="mailto:contact@coldwatch.fr">contact@coldwatch.fr</a></p>
 </footer>
+
+<script>
+    function toggleLang() {
+        const html = document.documentElement;
+        const goEn = !html.classList.contains('lang-en');
+        html.classList.toggle('lang-en', goEn);
+        html.lang = goEn ? 'en' : 'fr';
+        document.title = goEn
+            ? 'ColdWatch — Open-source IoT temperature monitoring for restaurants'
+            : 'ColdWatch — Surveillance IoT de température pour restaurants';
+        try { localStorage.setItem('coldwatch-lang', goEn ? 'en' : 'fr'); } catch(e) {}
+    }
+    (function() {
+        try { if (localStorage.getItem('coldwatch-lang') === 'en') toggleLang(); } catch(e) {}
+    })();
+</script>
 
 </body>
 </html>
