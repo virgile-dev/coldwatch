@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ColdWatch — Surveillance de température pour restaurants</title>
-    <meta name="description" content="ColdWatch surveille en temps réel la température de vos réfrigérateurs et congélateurs. Alertes SMS instantanées, conformité HACCP automatisée, tableau de bord web.">
+    <title>ColdWatch — Surveillance IoT de température pour restaurants</title>
+    <meta name="description" content="Projet open source : surveiller en temps réel la température des frigos et congélateurs avec un Raspberry Pi et des capteurs sans fil. Alertes SMS, tableau de bord web, conformité HACCP.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --navy:       #0d1b2e;
-            --navy-mid:   #152338;
+            --navy:       #0b1623;
+            --navy-mid:   #122030;
             --accent:     #1e6fc4;
             --accent-lt:  #2d84e0;
             --sky:        #7dc1f5;
+            --green:      #10b981;
+            --green-lt:   #6ee7b7;
             --off-white:  #f0f5fb;
             --white:      #ffffff;
             --text:       #0d1b2e;
             --text-mid:   #3d5a7a;
             --text-lt:    #6b8aaa;
             --border:     #d0e3f0;
+            --mono:       'JetBrains Mono', 'Courier New', monospace;
         }
 
         html { scroll-behavior: smooth; }
@@ -41,52 +44,79 @@
         header {
             position: sticky; top: 0; z-index: 100;
             background: var(--navy);
-            border-bottom: 1px solid rgba(255,255,255,.08);
+            border-bottom: 1px solid rgba(255,255,255,.07);
         }
         .nav-inner {
             display: flex; align-items: center; justify-content: space-between;
             height: 62px;
         }
-        .logo { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: -.02em; user-select: none; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: -.02em; user-select: none; text-decoration: none; }
         .logo em { font-style: normal; color: var(--sky); }
+        .nav-links { display: flex; align-items: center; gap: 10px; }
 
-        .btn { display: inline-block; text-decoration: none; border-radius: 7px; font-weight: 600; transition: background .15s, transform .1s; }
-        .btn-primary { background: var(--accent); color: #fff; padding: 14px 32px; font-size: 1rem; }
+        .btn { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; border-radius: 7px; font-weight: 600; transition: background .15s, transform .1s, border-color .15s, color .15s; }
+        .btn-primary { background: var(--accent); color: #fff; padding: 10px 22px; font-size: .9rem; }
         .btn-primary:hover { background: var(--accent-lt); transform: translateY(-1px); }
-        .btn-sm { font-size: .875rem; padding: 8px 20px; }
+        .btn-primary-lg { padding: 14px 32px; font-size: 1rem; }
+        .btn-ghost {
+            color: rgba(255,255,255,.65); padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,.15); font-size: .875rem;
+        }
+        .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,.35); }
+        .btn-ghost svg, .btn-github svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+        .btn-github {
+            display: inline-flex; align-items: center; gap: 9px;
+            background: rgba(255,255,255,.08); color: #fff;
+            border: 1px solid rgba(255,255,255,.18);
+            padding: 13px 26px; border-radius: 7px;
+            font-size: 1rem; font-weight: 600;
+            text-decoration: none;
+            transition: background .15s, border-color .15s;
+        }
+        .btn-github:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.35); }
+        .btn-github svg { width: 20px; height: 20px; }
 
         /* ── HERO ── */
         .hero {
-            background: linear-gradient(155deg, #0a1726 0%, var(--navy) 55%, #0e2040 100%);
+            background: var(--navy);
+            background-image: radial-gradient(circle, rgba(30,111,196,.18) 1px, transparent 1px);
+            background-size: 28px 28px;
             color: #fff;
             padding: 96px 0 88px;
             text-align: center;
         }
+        .hero-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
         .pill {
             display: inline-block;
-            background: rgba(30,111,196,.22);
-            border: 1px solid rgba(30,111,196,.5);
+            background: rgba(30,111,196,.2);
+            border: 1px solid rgba(30,111,196,.4);
             color: var(--sky);
-            font-size: .72rem; font-weight: 700;
+            font-size: .7rem; font-weight: 700;
             letter-spacing: .09em; text-transform: uppercase;
-            padding: 5px 14px; border-radius: 100px;
-            margin-bottom: 28px;
+            padding: 5px 13px; border-radius: 100px;
+        }
+        .pill-green {
+            background: rgba(16,185,129,.15);
+            border-color: rgba(16,185,129,.4);
+            color: var(--green-lt);
         }
         .hero h1 {
-            font-size: clamp(2rem, 4.5vw, 3.4rem);
-            font-weight: 800; letter-spacing: -.03em; line-height: 1.15;
-            max-width: 740px; margin: 0 auto 20px;
+            font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+            font-weight: 800; letter-spacing: -.03em; line-height: 1.2;
+            max-width: 700px; margin: 0 auto 20px;
         }
         .hero h1 em { font-style: normal; color: var(--sky); }
-        .hero .hero-desc {
-            font-size: 1.1rem; color: rgba(255,255,255,.7);
-            max-width: 560px; margin: 0 auto 36px; line-height: 1.75;
+        .hero-desc {
+            font-size: 1.05rem; color: rgba(255,255,255,.68);
+            max-width: 560px; margin: 0 auto 36px; line-height: 1.8;
         }
-        .hero-note { margin-top: 18px; font-size: .8rem; color: rgba(255,255,255,.35); }
+        .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .hero-note { margin-top: 20px; font-size: .78rem; color: rgba(255,255,255,.28); }
 
         /* ── SECTIONS ── */
         .section { padding: 80px 0; }
-        .section-bg  { background: var(--off-white); }
+        .section-bg   { background: var(--off-white); }
         .section-dark { background: var(--navy); color: #fff; }
 
         .label {
@@ -94,7 +124,8 @@
             letter-spacing: .1em; text-transform: uppercase;
             color: var(--accent); margin-bottom: 10px;
         }
-        .label-lt { color: var(--sky); }
+        .label-lt    { color: var(--sky); }
+        .label-green { color: var(--green); }
 
         h2 {
             font-size: clamp(1.5rem, 2.8vw, 2.1rem);
@@ -107,9 +138,9 @@
             font-size: 1.05rem; color: var(--text-mid);
             max-width: 580px; margin-bottom: 48px; line-height: 1.7;
         }
-        .section-dark .lead { color: rgba(255,255,255,.65); }
+        .section-dark .lead { color: rgba(255,255,255,.62); }
 
-        /* ── PROBLÈME ── */
+        /* ── CONTEXTE ── */
         .pain-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -124,11 +155,13 @@
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 14px; flex-shrink: 0;
         }
-        .icon-red { background: #fef2f2; }
-        .icon-blue { background: rgba(30,111,196,.1); }
+        .icon-red   { background: #fef2f2; }
+        .icon-blue  { background: rgba(30,111,196,.1); }
+        .icon-green { background: rgba(16,185,129,.12); }
         .icon-wrap svg { width: 20px; height: 20px; stroke: currentColor; }
-        .icon-red  svg { color: #dc2626; }
-        .icon-blue svg { color: var(--accent); }
+        .icon-red   svg { color: #dc2626; }
+        .icon-blue  svg { color: var(--accent); }
+        .icon-green svg { color: var(--green); }
         .pain-card h3 { font-size: .95rem; font-weight: 600; margin-bottom: 7px; }
         .pain-card p  { font-size: .875rem; color: var(--text-mid); line-height: 1.65; }
 
@@ -162,31 +195,7 @@
             margin: 0 auto 22px;
         }
         .step h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 9px; }
-        .step p  { font-size: .875rem; color: rgba(255,255,255,.6); line-height: 1.65; }
-
-        /* ── TARIFS ── */
-        .pricing-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px; max-width: 660px; margin-bottom: 32px;
-        }
-        .pricing-item {
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: 10px; padding: 26px 22px;
-            display: flex; gap: 16px; align-items: flex-start;
-        }
-        .pricing-item .icon-wrap { flex-shrink: 0; margin-bottom: 0; }
-        .pricing-item h3 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
-        .pricing-item p  { font-size: .875rem; color: var(--text-mid); line-height: 1.6; }
-        .pilot-callout {
-            background: rgba(30,111,196,.07);
-            border: 1px solid rgba(30,111,196,.25);
-            border-left: 3px solid var(--accent);
-            border-radius: 8px; padding: 22px 24px;
-            max-width: 560px;
-        }
-        .pilot-callout p { font-size: .9rem; color: var(--text-mid); line-height: 1.65; }
-        .pilot-callout strong { color: var(--text); }
+        .step p  { font-size: .875rem; color: rgba(255,255,255,.58); line-height: 1.65; }
 
         /* ── TÉMOIGNAGE ── */
         .testimonial-wrap { max-width: 720px; }
@@ -207,15 +216,44 @@
         }
         .testimonial-author { font-style: normal; }
         .testimonial-author strong { display: block; font-size: .95rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-        .restaurant-link {
-            display: block; font-size: .82rem; color: var(--text-mid);
-            text-decoration: none; margin-bottom: 4px;
-        }
+        .restaurant-link { display: block; font-size: .82rem; color: var(--text-mid); text-decoration: none; margin-bottom: 4px; }
         .restaurant-link:hover { color: var(--accent); }
         .stars { display: flex; align-items: center; gap: 5px; }
         .stars-filled { color: #f59e0b; font-size: .9rem; letter-spacing: 1px; }
         .stars-score  { font-size: .82rem; font-weight: 600; color: var(--text); }
         .stars-label  { font-size: .78rem; color: var(--text-lt); }
+
+        /* ── OPEN SOURCE ── */
+        .terminal {
+            background: rgba(0,0,0,.32);
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 10px; padding: 18px 22px;
+            font-family: var(--mono);
+            font-size: .83rem; line-height: 1.9;
+            max-width: 520px; margin-bottom: 36px;
+        }
+        .terminal::before {
+            content: '● ● ●';
+            display: block; color: rgba(255,255,255,.18);
+            font-size: .6rem; letter-spacing: 5px;
+            margin-bottom: 14px; font-family: 'Inter', sans-serif;
+        }
+        .t-comment { color: rgba(255,255,255,.3); }
+        .t-cmd     { color: var(--sky); }
+        .t-out     { color: rgba(255,255,255,.4); }
+
+        .os-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+            gap: 18px; margin-bottom: 36px;
+        }
+        .os-card {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 10px; padding: 26px 22px;
+        }
+        .os-card h3 { font-size: .95rem; font-weight: 600; color: #fff; margin-bottom: 7px; }
+        .os-card p  { font-size: .875rem; color: rgba(255,255,255,.52); line-height: 1.65; }
 
         /* ── CTA FINAL ── */
         .cta-final { text-align: center; }
@@ -224,13 +262,12 @@
 
         /* ── FOOTER ── */
         footer {
-            background: #07101d;
-            color: rgba(255,255,255,.35);
-            text-align: center;
-            padding: 24px;
+            background: #060e1a;
+            color: rgba(255,255,255,.28);
+            text-align: center; padding: 24px;
             font-size: .78rem;
         }
-        footer a { color: rgba(255,255,255,.45); text-decoration: none; }
+        footer a { color: rgba(255,255,255,.38); text-decoration: none; }
         footer a:hover { color: rgba(255,255,255,.7); }
 
         /* ── RESPONSIVE ── */
@@ -238,10 +275,12 @@
             .section { padding: 60px 0; }
             .hero    { padding: 68px 0 60px; }
             .steps   { grid-template-columns: 1fr; gap: 36px; }
-            .pricing-grid { max-width: 100%; }
+        }
+        @media (max-width: 520px) {
+            .hero-ctas { flex-direction: column; align-items: center; }
         }
         @media (max-width: 440px) {
-            .nav-btn { display: none; }
+            .nav-links .btn-ghost { display: none; }
         }
     </style>
 </head>
@@ -250,8 +289,14 @@
 <header>
     <div class="container">
         <nav class="nav-inner" aria-label="Navigation principale">
-            <div class="logo">Cold<em>Watch</em></div>
-            <a href="mailto:contact@coldwatch.fr" class="btn btn-primary btn-sm nav-btn">Nous contacter</a>
+            <a href="#" class="logo">Cold<em>Watch</em></a>
+            <div class="nav-links">
+                <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    GitHub
+                </a>
+                <a href="mailto:contact@coldwatch.fr" class="btn btn-primary">Contact</a>
+            </div>
         </nav>
     </div>
 </header>
@@ -259,20 +304,30 @@
 <!-- HERO -->
 <section class="hero">
     <div class="container">
-        <div class="pill">Surveillance IoT pour la restauration</div>
-        <h1>Vos frigos surveillés.<br><em>Vos nuits protégées.</em></h1>
-        <p class="hero-desc">ColdWatch surveille en continu la température de vos équipements frigorifiques, vous alerte par SMS en cas d'anomalie et assure votre conformité HACCP — automatiquement, 24h/24.</p>
-        <a href="mailto:contact@coldwatch.fr" class="btn btn-primary">Demander une démonstration</a>
-        <p class="hero-note">Déjà déployé et testé en conditions réelles &middot; Sans engagement</p>
+        <div class="hero-badges">
+            <div class="pill pill-green">Open Source</div>
+            <div class="pill">Raspberry Pi · IoT</div>
+            <div class="pill">Restauration</div>
+        </div>
+        <h1>Surveiller la température de ses frigos<br><em>ne devrait pas être compliqué.</em></h1>
+        <p class="hero-desc">ColdWatch est un projet hobbyiste construit avec un Raspberry Pi et des capteurs sans fil. Il surveille les températures en temps réel et envoie un SMS quand quelque chose ne va pas — la nuit, le week-end, pendant la canicule. Le code est ouvert.</p>
+        <div class="hero-ctas">
+            <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn-github">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                Voir sur GitHub
+            </a>
+            <a href="#contexte" class="btn btn-primary btn-primary-lg">Découvrir le projet</a>
+        </div>
+        <p class="hero-note">Déjà déployé et testé dans un vrai restaurant parisien</p>
     </div>
 </section>
 
-<!-- PROBLÈME -->
-<section class="section section-bg" id="probleme">
+<!-- CONTEXTE -->
+<section class="section section-bg" id="contexte">
     <div class="container">
-        <span class="label">Le problème</span>
-        <h2>Ce que coûte l'inattention une nuit</h2>
-        <p class="lead">Un frigo qui tombe en panne le vendredi soir, des denrées perdues le samedi matin, une inspection HACCP sans registre à jour : ces situations arrivent. Et elles coûtent cher.</p>
+        <span class="label">Pourquoi j'ai construit ça</span>
+        <h2>Un problème réel, une solution faite maison</h2>
+        <p class="lead">Les restaurants sont légalement tenus de surveiller leurs températures frigorifiques pour le HACCP. En pratique, ça veut dire des relevés manuels deux fois par jour — et aucune alerte quand un frigo tombe en panne la nuit.</p>
         <div class="pain-grid">
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
@@ -293,13 +348,13 @@
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <h3>Pertes alimentaires coûteuses</h3>
-                <p>Une rupture de chaîne du froid, c'est des centaines — parfois des milliers — d'euros de marchandise à jeter, sans compter le risque sanitaire pour vos clients.</p>
+                <p>Une rupture de chaîne du froid, c'est des centaines — parfois des milliers — d'euros de marchandise à jeter, sans compter le risque sanitaire.</p>
             </div>
             <div class="pain-card">
                 <div class="icon-wrap icon-red">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
-                <h3>Inspections HACCP stressantes</h3>
+                <h3>Conformité HACCP stressante</h3>
                 <p>Sans registre complet et à jour, une visite de contrôle sanitaire peut tourner à votre désavantage. La conformité n'est pas une option : c'est une obligation légale.</p>
             </div>
         </div>
@@ -309,16 +364,16 @@
 <!-- FONCTIONNALITÉS -->
 <section class="section" id="fonctionnalites">
     <div class="container">
-        <span class="label">La solution</span>
-        <h2>Tout ce dont vous avez besoin, rien de plus</h2>
-        <p class="lead">ColdWatch s'installe en quelques minutes et surveille vos équipements à votre place, en permanence. Voici ce qu'il fait concrètement.</p>
+        <span class="label">Ce que ça fait</span>
+        <h2>Simple, fiable, sans abonnement SaaS</h2>
+        <p class="lead">ColdWatch tourne sur un Raspberry Pi chez le restaurateur et surveille les équipements à sa place, en permanence.</p>
         <div class="feat-grid">
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
                 <h3>Alertes SMS instantanées</h3>
-                <p>Un seuil dépassé, une anomalie détectée — vous recevez un SMS immédiatement, où que vous soyez, jour et nuit.</p>
+                <p>Un seuil dépassé, une anomalie détectée — un SMS part immédiatement, où que vous soyez, jour et nuit.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
@@ -332,21 +387,21 @@
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 </div>
                 <h3>Détection de panne</h3>
-                <p>Si un capteur cesse d'émettre, ColdWatch le détecte et vous alerte : panne de capteur, batterie morte ou défaillance de l'équipement frigorifique.</p>
+                <p>Si un capteur cesse d'émettre, ColdWatch le détecte et alerte : panne de capteur, batterie morte ou défaillance de l'équipement.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                 </div>
                 <h3>Suivi de batterie</h3>
-                <p>L'état de la batterie de chaque capteur est visible en permanence sur le tableau de bord. Vous êtes prévenu avant la coupure.</p>
+                <p>L'état de la batterie de chaque capteur est visible sur le tableau de bord. Vous êtes prévenu avant la coupure.</p>
             </div>
             <div class="feat-card">
                 <div class="icon-wrap icon-blue">
                     <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
                 <h3>Tableau de bord web</h3>
-                <p>Relevés en temps réel, historique des températures, alertes passées, mise en veille par appareil — accessible depuis n'importe quel navigateur.</p>
+                <p>Relevés temps réel, historique des températures, alertes passées, mise en veille par appareil — depuis n'importe quel navigateur.</p>
             </div>
         </div>
     </div>
@@ -357,55 +412,23 @@
     <div class="container">
         <span class="label label-lt">Mise en service</span>
         <h2>Opérationnel en moins d'une heure</h2>
-        <p class="lead">Nous nous occupons de l'installation. Vous n'avez qu'à vous connecter et définir vos seuils.</p>
+        <p class="lead">Pas de câblage, pas de technicien externe. Un Raspberry Pi, des capteurs sans fil, et c'est parti.</p>
         <div class="steps">
             <div class="step">
                 <div class="step-num">1</div>
                 <h3>Installation sur place</h3>
-                <p>Nous installons le boîtier ColdWatch chez vous et le connectons à votre réseau Wi-Fi. Les capteurs sans fil sont fixés sur vos équipements frigorifiques. Comptez moins d'une heure.</p>
+                <p>On installe le Raspberry Pi chez le restaurateur et on le connecte à son réseau Wi-Fi. Les capteurs sans fil sont fixés sur les équipements frigorifiques. Moins d'une heure.</p>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
-                <h3>Configurez vos seuils</h3>
-                <p>Accédez au tableau de bord, définissez les seuils de température par appareil et renseignez les numéros à alerter. Tout se fait depuis un navigateur, en quelques clics.</p>
+                <h3>Configuration</h3>
+                <p>Le restaurateur accède au tableau de bord, définit ses seuils de température par appareil et renseigne les numéros à alerter. Quelques clics.</p>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
-                <h3>Recevez vos alertes</h3>
-                <p>Dès qu'une anomalie est détectée, vous êtes alerté par SMS. Vous pouvez mettre une alerte en veille par appareil depuis le tableau de bord si besoin.</p>
+                <h3>ColdWatch veille</h3>
+                <p>Dès qu'une anomalie est détectée, un SMS part immédiatement. Les alertes peuvent être mises en veille par appareil depuis le tableau de bord.</p>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- TARIFS -->
-<section class="section section-bg" id="tarifs">
-    <div class="container">
-        <span class="label">Tarifs</span>
-        <h2>Une tarification simple, en deux postes</h2>
-        <p class="lead">Pas de surprise sur la facture. ColdWatch repose sur deux composantes claires, sans frais cachés.</p>
-        <div class="pricing-items">
-            <div class="pricing-item">
-                <div class="icon-wrap icon-blue">
-                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>
-                </div>
-                <div>
-                    <h3>Mise en place</h3>
-                    <p>Matériel (capteurs sans fil, boîtier) et installation sur place inclus. Frais unique, réglé une seule fois.</p>
-                </div>
-            </div>
-            <div class="pricing-item">
-                <div class="icon-wrap icon-blue">
-                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                </div>
-                <div>
-                    <h3>Abonnement mensuel</h3>
-                    <p>Surveillance temps réel, alertes SMS illimitées, accès tableau de bord et support. Sans engagement de durée.</p>
-                </div>
-            </div>
-        </div>
-        <div class="pilot-callout">
-            <p><strong>Nous sommes en phase pilote</strong> et recherchons de nouveaux restaurants partenaires à Paris et en Ile-de-France. Si vous souhaitez rejoindre les premiers établissements à déployer ColdWatch, contactez-nous — nous étudions chaque demande individuellement.</p>
         </div>
     </div>
 </section>
@@ -413,7 +436,7 @@
 <!-- TÉMOIGNAGE -->
 <section class="section" id="temoignage">
     <div class="container">
-        <span class="label">Ils nous font confiance</span>
+        <span class="label">Testé en conditions réelles</span>
         <div class="testimonial-wrap">
             <blockquote class="testimonial">
                 <p class="testimonial-text">En un mois, on a eu deux coupures de courant la nuit. À chaque fois, je découvrais le lendemain matin que les équipements avaient chauffé — et je devais jeter des centaines d'euros de marchandise. En plus, noter les températures deux fois par jour pour le HACCP, c'est une vraie contrainte quand le service est chargé. Quand j'ai entendu parler de la canicule annoncée pour la semaine suivante, j'ai décidé d'agir. Comparé à la marchandise perdue et au stress de savoir que ça pouvait recommencer, ça n'a pas été une question longtemps. Maintenant, si quelque chose se passe la nuit, je le sais dans la minute — et mes relevés se font automatiquement.</p>
@@ -434,18 +457,62 @@
     </div>
 </section>
 
-<!-- CTA FINAL -->
-<section class="section section-dark cta-final">
+<!-- OPEN SOURCE -->
+<section class="section section-dark" id="open-source">
     <div class="container">
-        <span class="label label-lt">Passez à l'action</span>
-        <h2>Prêt à surveiller vos frigos sans y penser ?</h2>
-        <p class="lead">Contactez-nous pour une démonstration ou pour toute question. Nous répondons sous 24 heures.</p>
-        <a href="mailto:contact@coldwatch.fr" class="btn btn-primary">Écrire à contact@coldwatch.fr</a>
+        <span class="label label-green">Code ouvert</span>
+        <h2>Un projet fait pour être partagé</h2>
+        <p class="lead">ColdWatch est un projet personnel construit pendant mon temps libre. Le code est disponible sur GitHub sous licence MIT. Si vous avez un restaurant, êtes développeur, ou les deux — bienvenue.</p>
+        <div class="terminal">
+            <span class="t-comment"># Cloner le projet</span><br>
+            <span class="t-cmd">git clone https://github.com/virgile-dev/coldwatch.git</span><br>
+            <span class="t-out">Cloning into 'coldwatch'...</span><br>
+            <br>
+            <span class="t-comment"># Installer et lancer</span><br>
+            <span class="t-cmd">cd coldwatch &amp;&amp; ./setup.sh</span>
+        </div>
+        <div class="os-grid">
+            <div class="os-card">
+                <div class="icon-wrap icon-green">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                </div>
+                <h3>Contributions bienvenues</h3>
+                <p>Bug, idée de fonctionnalité, amélioration de la doc — ouvrez une issue ou soumettez une PR. Le projet est encore jeune et a plein de marge.</p>
+            </div>
+            <div class="os-card">
+                <div class="icon-wrap icon-green">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                </div>
+                <h3>Vous êtes restaurateur ?</h3>
+                <p>Si vous voulez tester ColdWatch dans votre établissement, écrivez-moi. Je cherche des retours d'usage concrets pour améliorer le projet.</p>
+            </div>
+            <div class="os-card">
+                <div class="icon-wrap icon-green">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h3>Licence MIT</h3>
+                <p>Utilisez, modifiez, redistribuez librement. Si vous construisez quelque chose à partir de ColdWatch, je serais curieux de l'entendre.</p>
+            </div>
+        </div>
+        <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer" class="btn-github">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            virgile-dev/coldwatch sur GitHub
+        </a>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="section cta-final">
+    <div class="container">
+        <span class="label">Envie d'en parler ?</span>
+        <h2>Une question, un retour, une idée ?</h2>
+        <p class="lead">Que vous soyez restaurateur curieux, développeur ou simplement intéressé par le projet — je lis tous les messages.</p>
+        <a href="mailto:contact@coldwatch.fr" class="btn btn-primary btn-primary-lg">Écrire à contact@coldwatch.fr</a>
     </div>
 </section>
 
 <footer>
-    <p>&copy; 2026 ColdWatch &mdash; Surveillance de température pour la restauration &middot; <a href="mailto:contact@coldwatch.fr">contact@coldwatch.fr</a></p>
+    <p>&copy; 2026 ColdWatch &mdash; Projet open source &middot; <a href="https://github.com/virgile-dev/coldwatch" target="_blank" rel="noopener noreferrer">GitHub</a> &middot; <a href="mailto:contact@coldwatch.fr">contact@coldwatch.fr</a></p>
 </footer>
 
 </body>
